@@ -1,15 +1,93 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        CustomerManager cm = new CustomerManager();
+        Scanner sc = new Scanner(System.in);
+        Customer loggedInCustomer = null; // Track the logged-in customer
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        while (true) {
+            System.out.println("Welcome to the Banking App");
+            System.out.println("Which option would you like to choose?");
+            System.out.println("1: Login");
+            System.out.println("2: Register");
+            System.out.println("3: Exit");
+
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline after nextInt()
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Please enter your full name:");
+                    String name = sc.nextLine();
+                    System.out.println("Please enter your password:");
+                    String password = sc.nextLine();
+                    loggedInCustomer = cm.loginCustomer(name, password); // Modified to return the logged-in customer
+
+                    if (loggedInCustomer != null) {
+                        System.out.println("Customer logged in successfully.");
+
+                        // Show secondary menu for logged-in users
+                        boolean loggedIn = true;
+                        while (loggedIn) {
+                            System.out.println("1: View balance");
+                            System.out.println("2: Deposit");
+                            System.out.println("3: Withdraw");
+                            System.out.println("4: Log out");
+
+                            int choice2 = sc.nextInt();
+                            sc.nextLine(); // Consume newline after nextInt()
+
+                            Account account = loggedInCustomer.getAccounts().get(0); // Assumes the customer has one account
+
+                            switch (choice2) {
+                                case 1:
+                                    System.out.println("Current balance: " + account.getBalance());
+                                    break;
+                                case 2:
+                                    System.out.println("Enter amount to deposit:");
+                                    double depositAmount = sc.nextDouble();
+                                    sc.nextLine(); // Consume newline
+                                    account.deposit(depositAmount);
+                                    System.out.println("Deposit successful. New balance: " + account.getBalance());
+                                    break;
+                                case 3:
+                                    System.out.println("Enter amount to withdraw:");
+                                    double withdrawAmount = sc.nextDouble();
+                                    sc.nextLine(); // Consume newline
+                                    if (withdrawAmount > account.getBalance()) {
+                                        System.out.println("Insufficient balance. Withdrawal failed.");
+                                    } else {
+                                        account.withdraw(withdrawAmount);
+                                        System.out.println("Withdrawal successful. New balance: " + account.getBalance());
+                                    }
+                                    break;
+                                case 4:
+                                    System.out.println("Logged out successfully.");
+                                    loggedIn = false;
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice, please try again.");
+                            }
+                        }
+                    } else {
+                        System.out.println("Login failed. Please check your credentials.");
+                    }
+                    break;
+
+                case 2:
+                    System.out.println("Please enter your full name:");
+                    name = sc.nextLine();
+                    System.out.println("Please create a password:");
+                    password = sc.nextLine();
+                    cm.createAccount(name, password);
+                    break;
+
+                case 3:
+                    System.out.println("Goodbye");
+                    return; // Exit the loop and end the program
+
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
         }
     }
 }
