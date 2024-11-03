@@ -39,20 +39,22 @@ public class CustomerManager {
     }
 
     // Method to log in a customer
-    public void loginCustomer(String name, String password) {
+    public Customer  loginCustomer(String name, String password) {
         boolean loggedIn = false;
 
         for (Customer customer : customers) {
             if (name.equals(customer.getName()) && password.equals(customer.getPassword())) {
                 System.out.println("Customer logged in succesfully");
                 loggedIn = true;
-                return; // Exit method after successful login
+                return customer; // Exit method after successful login
             }
         }
 
         if (!loggedIn) {
             System.out.println("Wrong customer credentials");
+
         }
+        return null;
     }
 
 }

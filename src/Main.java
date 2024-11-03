@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         CustomerManager cm = new CustomerManager();
@@ -31,7 +33,8 @@ public class Main {
                             System.out.println("1: View balance");
                             System.out.println("2: Deposit");
                             System.out.println("3: Withdraw");
-                            System.out.println("4: Log out");
+                            System.out.println("4: View transaction history");
+                            System.out.println("5: Log out");
 
                             int choice2 = sc.nextInt();
                             sc.nextLine(); // Consume newline after nextInt()
@@ -60,7 +63,17 @@ public class Main {
                                         System.out.println("Withdrawal successful. New balance: " + account.getBalance());
                                     }
                                     break;
+
                                 case 4:
+                                    if (account.getTransactions().isEmpty()) {
+                                        System.out.println("No transaction history available.");
+                                    } else {
+                                        for (Transaction transaction : account.getTransactions()) {
+                                            System.out.println(transaction); // Calls the toString() method of the Transaction class
+                                        }
+                                    }
+                                    break; // Add this break to avoid fall-through
+                                    case 5:
                                     System.out.println("Logged out successfully.");
                                     loggedIn = false;
                                     break;
